@@ -1,0 +1,8 @@
+{
+    "client_id" : "",
+    "client_secret" : "",
+    "subreddit": "",
+    "path": "./files/",
+    "number": 10,
+    "filter": "hot"
+}
