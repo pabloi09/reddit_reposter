@@ -22,8 +22,8 @@ class RedditDownloader:
             submissions = self.get_submissions_by_filter()
             self.get_posts_info(submissions)
             if len(self.posts) > 0:
-                #self.run_concurrent_download()
-                self.run_linear_download()
+                self.run_concurrent_download()
+                #self.run_linear_download()
         except Exception as e:
             print(e)
     
