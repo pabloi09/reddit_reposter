@@ -6,4 +6,5 @@ if __name__ == '__main__':
         config = json.load(json_config)
     
     bot = TwitterBot.TwitterBot(config)
-    bot.test_tweet("Hello world!")
+    bot.tweet_post("/path/to/filedir", "{} \nby {} via {}")
+    #bot.test_tweet("Is the token working?")
