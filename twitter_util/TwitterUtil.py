@@ -45,9 +45,9 @@ class TwitterUtil:
         metadata = {}
         for temp_filename  in os.listdir(path):
             temp_filename = path + temp_filename 
-            if os.path.isfile(temp_filename):0
+            if os.path.isfile(temp_filename):
                 if self.is_metadata_file(temp_filename):
-                    metadata = self.get_metadata()
+                    metadata = self.get_metadata(temp_filename)
                 else:
                     filename = temp_filename
         return filename, metadata
@@ -56,7 +56,7 @@ class TwitterUtil:
     def is_metadata_file(self, filename):
         return filename.endswith(".json")
     
-    def get_metadata(self, filename):
+    def get_metadata(self, temp_filename):
         with open(temp_filename) as metadata_json:
             metadata = json.load(metadata_json)
         return metadata
