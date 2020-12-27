@@ -22,14 +22,17 @@ class Security:
         
     @classmethod
     def encrypt_password(self, password, salt = None):
+        password = password.encode('utf-8')
         if salt is None:
             salt = salt = os.urandom(16)
         kdf = PBKDF2HMAC(algorithm = hashes.SHA256(), length=32, salt=salt, iterations= 100000, backend = default_backend())
         return base64.urlsafe_b64encode(kdf.derive(password)), salt
     
     def cipher(self, data):
+        data = data.encode('utf-8')
         return self.f.encrypt(data)
 
     def decipher(self, ciphered_data):
-        return self.f.decrypt(ciphered_data)
+        data = self.f.decrypt(ciphered_data)
+        return data.decode('utf-8')
 

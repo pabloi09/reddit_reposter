@@ -1,5 +1,6 @@
 import datetime
 import time
+import sqlite3
 
 def adapt_datetime(ts):
     return time.mktime(ts.timetuple())
@@ -7,7 +8,7 @@ def adapt_datetime(ts):
 def create_tables(file):
     
     sqlite3.register_adapter(datetime.datetime, adapt_datetime)
-    conn = sqlite3.connect("./data.db")
+    conn = sqlite3.connect(file)
 
     cursor = conn.cursor()
 
@@ -18,12 +19,12 @@ def create_tables(file):
 
     cursor.execute("""CREATE table project ( project_id integer primary key,
                                             reddit_config blob,
-                                            twitter_config blob
+                                            twitter_config blob,
                                             insta_config blob,
                                             user_id integer not null,
                                             foreign key(user_id) references user(user_id) )""")
 
-    cursor.execute("""CREATE table post ( post_id integer primary key,
+    cursor.execute("""CREATE table post ( post_id string,
                                         date_uploaded_tw timestamp,
                                         date_uploaded_insta timestamp,
                                         project_id integer not null,

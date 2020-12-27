@@ -1,5 +1,5 @@
 from instabot import Bot
-from media_util import is_a_video, get_post_data, PhotoCropper
+from media_util import is_a_video, get_post_data, PhotoCropper, is_an_image
 TMP_COOKIE_LOCATION = "./config"
 
 class InstaUtil:
@@ -19,7 +19,7 @@ class InstaUtil:
         
         if is_a_video(filename):
             self.bot.upload_video(filename, caption=caption)
-        else:
+        elif is_an_image(filename):
             PhotoCropper().prepare_and_fix_photo(filename)
             self.bot.upload_photo(filename, caption=caption)
     

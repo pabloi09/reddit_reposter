@@ -5,17 +5,26 @@ import json
 import concurrent.futures
 import re
 import youtube_dl
+from media_util import is_an_image
 
 class RedditDownloader:
-    def __init__(self, config):
+    def __init__(self, 
+                 config, 
+                 post_exists, 
+                 record_post,
+                 number = 10):
         self.subreddit = config["subreddit"]
-        self.number = config["number"]
         self.filter = config["filter"]
         self.path = config["path"]
         self.reddit = praw.Reddit(client_id = config["client_id"],
                                   client_secret = config["client_secret"],
                                   user_agent = "pabloi09.reddit.downloader")
         self.posts = []
+        self.number = number
+        self.post_exists = post_exists
+        self.record_post = record_post
+        self.downloaded = []
+
     
     def start(self):
         try:
@@ -24,6 +33,8 @@ class RedditDownloader:
             if len(self.posts) > 0:
                 self.run_concurrent_download()
                 #self.run_linear_download()
+                for post_id in self.downloaded:
+                    self.record_post(post_id)
         except Exception as e:
             print(e)
     
@@ -40,11 +51,11 @@ class RedditDownloader:
             post = {}
             if submission.stickied:
                 continue
-            if self.is_an_image(submission.url):
+            if is_an_image(submission.url):
                 post = self.get_image_post_data(post,submission)
-                self.add_post_or_continue(post)
             elif self.is_a_video(submission):
                 post = self.get_video_post_data(post, submission)
+            if post:
                 self.add_post_or_continue(post)
             if len(self.posts) >= self.number:
                 break
@@ -61,9 +72,6 @@ class RedditDownloader:
         for post in self.posts:
             self.download_post(post)
 
-    def is_an_image(self, name):
-        return name.endswith(("jpg", "jpeg", "png"))
-
     def is_a_video(self, submission):
         return submission.media
     
@@ -79,7 +87,8 @@ class RedditDownloader:
         return post
     
     def get_post_data(self, post, submission):
-        post["dir"] = self.path + re.search('(?s:.*)\w/(.*)', submission.url).group(1).split(".")[0] + "/" 
+        post["id"] = re.search('(?s:.*)\w/(.*)', submission.url).group(1).split(".")[0]
+        post["dir"] = self.path + post["id"] + "/" 
         post["fname"]= post["dir"] + re.search('(?s:.*)\w/(.*)', submission.url).group(1)
         post["post_url"] = "redd.it/" + submission.id
         post["source_url"] = submission.url
@@ -89,24 +98,25 @@ class RedditDownloader:
         return post
 
     def add_post_or_continue(self, post):
-        if self.file_does_not_exist(post["fname"]):
+        if not self.post_exists(post["id"]):
             self.posts.append(post)
-    
-    def file_does_not_exist(self, fname):
-        return not os.path.isfile(fname)
     
     def path_does_not_exist(self):
         return not os.path.exists(self.path)
 
     def download_post(self, post):
-        os.makedirs(post["dir"])
-        if self.is_an_image(post["fname"]):
-            self.download_and_save_image(post)
-        else:
-            self.download_and_save_video(post)
-        
-        self.save_metadata(post)
-        
+        try:
+            os.makedirs(post["dir"])
+            if is_an_image(post["fname"]):
+                self.download_and_save_image(post)
+            else:
+                self.download_and_save_video(post)
+            
+            self.save_metadata(post)
+            self.downloaded.append(post["id"])
+        except Exception as e:
+            print(e)
+            
     
     def download_and_save_image(self,post):
         r = requests.get(post["source_url"])

@@ -7,6 +7,9 @@ import json
 def is_a_video(filename):
     return filename.endswith(".mp4")
 
+def is_an_image(filename):
+    return filename.endswith(("jpg", "jpeg", "png"))
+
 def get_post_data(path):
     filename = ""
     metadata = {}

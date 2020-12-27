@@ -1,14 +1,14 @@
 import sqlite3
 import json
-from Security import Security
+from database.Security import Security
 
 class User:
-    def __init__(self, user_id, username, password, salt = None):
-        self.user_id, self.username = user_id, username
+    def __init__(self, username, password, salt = None):
+        self.username = username
         self.password, self.salt = Security.encrypt_password(password, salt)
 
     def to_insert(self):
-        return (self.user_id, self.username, self.password, self.salt)
+        return (self.username, self.password, self.salt)
 
     @classmethod
     def from_database(cls, row):
@@ -16,23 +16,27 @@ class User:
 
 
 class Project:
-    def __init__(self, project_id, reddit_config, twitter_config, insta_config):
-        self.s = Security()
-        self.project_id, self.reddit_config, self.twitter_config, self.insta_config = project_id, reddit_config, twitter_config, insta_config
+    def __init__(self, reddit_config, twitter_config, insta_config, user_id, s = None):
+        self.s = Security() if s is None else s
+        self.reddit_config, self.twitter_config, self.insta_config, self.user_id = reddit_config, twitter_config, insta_config, user_id
     
     def to_insert(self):
-        reddit_config = self.s.cipher(json.dump(self.reddit_config))
-        twitter_config = self.s.cipher(json.dump(self.twitter_config))
-        insta_config = self.s.cipher(json.dump(self.insta_config))
-        return (self.project_id, reddit_config, twitter_config, insta_config)
+        reddit_config = self.s.cipher(json.dumps(self.reddit_config))
+        twitter_config = self.s.cipher(json.dumps(self.twitter_config))
+        insta_config = self.s.cipher(json.dumps(self.insta_config))
+        return (reddit_config, twitter_config, insta_config, self.user_id)
 
     @classmethod
     def from_database(cls, row):
-        reddit_config = json.load(self.s.decipher(row["reddit_config"]))
-        twitter_config = json.load(self.s.decipher(row["twitter_config"]))
-        insta_config = json.load(self.s.decipher(row["insta_config"]))
-        return cls(row["project_id"], row["reddit_config"], row["twitter_config"], row["insta_config"])
+        s = Security()
+        reddit_config = json.loads(s.decipher(row["reddit_config"]))
+        twitter_config = json.loads(s.decipher(row["twitter_config"]))
+        insta_config = json.loads(s.decipher(row["insta_config"]))
+        result = cls(reddit_config, twitter_config, insta_config, row["user_id"], s)
+        result.project_id = row["project_id"]
+        return result
     
+
 class TwitterAccountToFollow:
     def __init__(self, user_id, date_follow, date_unfollow):
         self.user_id, self.date_follow, self.date_unfollow = user_id, date_follow, date_unfollow

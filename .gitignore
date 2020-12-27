@@ -1,8 +1,9 @@
 __pycache__
-config.json.secret
+*.secret
 *.db
 *.key
 instagram_util/config
 reddit_downloader/files
 venv/
 rreposter.egg-info
+*.key
