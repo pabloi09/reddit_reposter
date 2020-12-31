@@ -27,10 +27,11 @@ def create_test_data(file):
 
     projects = [
         Project(reddit_config, twitter_config, insta_config,1).to_insert(),
-        Project(reddit_config, twitter_config, insta_config,1).to_insert(),
-        Project(reddit_config, twitter_config, insta_config,2).to_insert(),
-        Project(reddit_config, twitter_config, insta_config,3).to_insert(),
-        Project(reddit_config, twitter_config, insta_config,3).to_insert(),]
+        #Project(reddit_config, twitter_config, insta_config,1).to_insert(),
+        #Project(reddit_config, twitter_config, insta_config,2).to_insert(),
+        #Project(reddit_config, twitter_config, insta_config,3).to_insert(),
+        #Project(reddit_config, twitter_config, insta_config,3).to_insert(),
+        ]
     
     cursor.executemany("INSERT INTO project(reddit_config, twitter_config, insta_config, user_id) VALUES (?,?,?,?)", projects)
     conn.commit()
