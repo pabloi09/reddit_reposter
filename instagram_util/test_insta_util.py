@@ -8,7 +8,7 @@ if __name__ == '__main__':
         config = json.load(json_config)
     
     bot = InstaUtil(config)
-    bot.publish_post("/url/to/dir", "{} \nby {} via {}")
+    bot.publish_post("/url/to/dir")
     followers = bot.get_followers_of("user")
     for follower in followers:
         time.sleep(random.uniform(1,3))

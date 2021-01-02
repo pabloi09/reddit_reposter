@@ -8,7 +8,7 @@ def adapt_datetime(ts):
 def create_tables(file):
     
     sqlite3.register_adapter(datetime.datetime, adapt_datetime)
-    conn = sqlite3.connect(file)
+    conn = sqlite3.connect(file, detect_types=sqlite3.PARSE_DECLTYPES|sqlite3.PARSE_COLNAMES)
 
     cursor = conn.cursor()
 
@@ -28,6 +28,7 @@ def create_tables(file):
                                         date_uploaded_tw timestamp,
                                         date_uploaded_insta timestamp,
                                         project_id integer not null,
+                                        closed boolean default false,
                                         foreign key(project_id) references project(project_id) )""")
 
     cursor.execute("""CREATE table twitter_followed ( user_id integer not null,

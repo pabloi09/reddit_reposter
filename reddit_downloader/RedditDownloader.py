@@ -5,7 +5,7 @@ import json
 import concurrent.futures
 import re
 import youtube_dl
-from media_util import is_an_image
+from media_util import is_an_image, is_a_video, path_does_not_exist
 
 class RedditDownloader:
     def __init__(self, 
@@ -25,7 +25,6 @@ class RedditDownloader:
         self.record_post = record_post
         self.downloaded = []
 
-    
     def start(self):
         try:
             submissions = self.get_submissions_by_filter()
@@ -53,7 +52,7 @@ class RedditDownloader:
                 continue
             if is_an_image(submission.url):
                 post = self.get_image_post_data(post,submission)
-            elif self.is_a_video(submission):
+            elif is_a_video(submission, reddit = True):
                 post = self.get_video_post_data(post, submission)
             if post:
                 self.add_post_or_continue(post)
@@ -61,19 +60,16 @@ class RedditDownloader:
                 break
 
     def run_concurrent_download(self):
-        if self.path_does_not_exist():
+        if path_does_not_exist(self.path):
             os.makedirs(self.path)
         with concurrent.futures.ThreadPoolExecutor() as ptolemy:
             ptolemy.map(self.download_post, self.posts)
     
     def run_linear_download(self): #testing purposes
-        if self.path_does_not_exist():
+        if path_does_not_exist(self.path):
             os.makedirs(self.path)
         for post in self.posts:
             self.download_post(post)
-
-    def is_a_video(self, submission):
-        return submission.media
     
     def get_image_post_data(self, post, submission):
         post = self.get_post_data(post, submission)
@@ -100,9 +96,6 @@ class RedditDownloader:
     def add_post_or_continue(self, post):
         if not self.post_exists(post["id"]):
             self.posts.append(post)
-    
-    def path_does_not_exist(self):
-        return not os.path.exists(self.path)
 
     def download_post(self, post):
         try:
@@ -135,10 +128,3 @@ class RedditDownloader:
         met_file = post["dir"] + re.search('(?s:.*)\w/(.*)', post["url"]).group(1).split(".")[0] + ".json"
         with open(met_file, "w") as f:
             json.dump(metadata, f)
-    
-
-
-    
-
-
-

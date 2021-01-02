@@ -1,5 +1,6 @@
 from database.Database import Database
 from reddit_downloader.RedditDownloader import RedditDownloader
+
 dbAPI = Database("db.db")
 
     

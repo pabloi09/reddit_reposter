@@ -4,7 +4,9 @@ import numpy as np
 import os
 import json
 
-def is_a_video(filename):
+def is_a_video(filename, reddit = False):
+    if reddit:
+        return filename.media
     return filename.endswith(".mp4")
 
 def is_an_image(filename):
@@ -29,6 +31,9 @@ def get_metadata(temp_filename):
     with open(temp_filename) as metadata_json:
         metadata = json.load(metadata_json)
     return metadata
+
+def path_does_not_exist(path):
+        return not os.path.exists(path)
 
 class PhotoCropper:
     #thanks to https://github.com/basnijholt/instacron

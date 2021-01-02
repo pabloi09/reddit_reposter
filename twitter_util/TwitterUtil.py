@@ -2,8 +2,8 @@ import tweepy
 import os
 import json
 import time
-import VideoMedia
-from media_util import is_a_video, get_post_data
+from twitter_util.VideoMedia import VideoMedia
+from media_util import is_a_video, get_post_data, is_an_image
 
 class TwitterUtil:
     def __init__(self, config):
@@ -11,20 +11,21 @@ class TwitterUtil:
         auth.set_access_token(config["access_token"], config["access_token_secret"])
         self.api = tweepy.API(auth)
         self.auth = auth.apply_auth()
+        self.template = config["template"]
     
     def test_tweet(self, post):
         self.api.update_status(post)
 
-    def tweet_post(self, path, template):
+    def tweet_post(self, path):
         filename, metadata = get_post_data(path)
         
         if is_a_video(filename):
-            media = VideoMedia.VideoMedia(filename, self.auth)
+            media = VideoMedia(filename, self.auth)
             media.upload_video()
-        else:
+        elif is_an_image:
             media = self.api.media_upload(filename)
 
-        status = template.format(metadata["title"], metadata["author"] ,metadata["post_url"])
+        status = self.template.format(metadata["title"], metadata["author"] ,metadata["post_url"])
         self.api.update_status(status=status, media_ids=[media.media_id])
     
     def get_followers_of(self, user, cursor): #1 lista/h

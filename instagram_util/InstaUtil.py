@@ -1,6 +1,6 @@
 from instabot import Bot
 from media_util import is_a_video, get_post_data, PhotoCropper, is_an_image
-TMP_COOKIE_LOCATION = "./config"
+
 
 class InstaUtil:
 
@@ -12,10 +12,11 @@ class InstaUtil:
                        max_follows_per_day=10000,
                        max_unfollows_per_day=10000)
         self.bot.login(username= config["username"], password= config["password"])
+        self.template = config["template"]
 
-    def publish_post(self, path, template):
+    def publish_post(self, path):
         filename, metadata = get_post_data(path)
-        caption = template.format(metadata["title"], metadata["author"] ,metadata["post_url"])
+        caption = self.template.format(metadata["title"], metadata["author"] ,metadata["post_url"])
         
         if is_a_video(filename):
             self.bot.upload_video(filename, caption=caption)
