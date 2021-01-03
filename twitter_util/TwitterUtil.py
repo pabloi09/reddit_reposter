@@ -30,7 +30,7 @@ class TwitterUtil:
     
     def get_followers_of(self, user, cursor): #1 lista/h
         followers, cursor = self.api.followers_ids(screen_name=user,cursor=cursor)
-        result = {"followers": followers, "cursor": cursor}
+        result = {"followers": followers, "cursor": cursor[1]}
         return result
     
     def follow(self, user_id): #1 follow/ 3 min y 45 segundos Max num de seguidos: 400/dia 5000 en total. Hacer unfollows cada 13 días como máximo. Se va a hacer por semana

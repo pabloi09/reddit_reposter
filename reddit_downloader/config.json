@@ -1,7 +1,7 @@
 {
     "client_id" : "",
     "client_secret" : "",
-    "subreddit": "",
+    "subreddit": "orslokx",
     "path": "./files/",
     "number": 10,
     "filter": "hot"

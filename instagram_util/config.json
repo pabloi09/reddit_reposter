@@ -1,5 +1,6 @@
 {
-    "username":"", 
-    "password": "",
-    "cookie_location": "/path/to/dir/config/"
+    "username":"username(without @)", 
+    "password": "password",
+    "cookie_location": "/location/to/coookies/config/",
+    "template": "{} \nby {} via {}"
 }
