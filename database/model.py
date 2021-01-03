@@ -35,30 +35,40 @@ class Project:
         result = cls(reddit_config, twitter_config, insta_config, row["user_id"], s)
         result.project_id = row["project_id"]
         return result
-    
-
-class TwitterAccountToFollow:
-    def __init__(self, user_id, date_follow, date_unfollow):
-        self.user_id, self.date_follow, self.date_unfollow = user_id, date_follow, date_unfollow
-
-    def to_insert(self):
-        return (self.user_id, self.date_follow, self.date_unfollow)
-
-    @classmethod
-    def from_database(cls, row):
-        return cls(row["user_id"], row["date_follow"], row["date_unfollow"])
-    
+        
 class Post:
-    def __init__(self, post_id, date_uploaded_tw, date_uploaded_insta):
-        self.post_id, self.date_uploaded_tw, self.date_uploaded_insta = post_id, date_uploaded_tw,date_uploaded_insta
+    def __init__(self, post_id, date_uploaded_tw, date_uploaded_insta, closed):
+        self.post_id, self.date_uploaded_tw, self.date_uploaded_insta, self.closed = post_id, date_uploaded_tw, date_uploaded_insta, closed
     
     def to_insert(self):
-        return (self.post_id, self.date_uploaded_tw, self.date_uploaded_insta)
+        return (self.post_id, self.date_uploaded_tw, self.date_uploaded_insta, self.closed)
     
     @classmethod
     def from_database(cls, row):
-        return cls(row["post_id"], row["date_uploaded_tw"], row["date_uploaded_insta"])
+        return cls(row["post_id"], row["date_uploaded_tw"], row["date_uploaded_insta"], row["closed"])
+
+class TwitterEngagement:
+    def __init__(self, username, cursor = -1, finished = False, eng_id = None, project_id = None):
+        self.username, self.cursor, self.finished, self.eng_id, self.project_id = username, cursor, finished, eng_id, project_id
     
+    def to_insert(self):
+        return (self.username, self.cursor, self.cursor == 0)
+    
+    @classmethod
+    def from_database(cls, row):
+        return cls(row["username"], row["cursor"], row["finished"], row["eng_id"], row["project_id"])
+
+class InstaEngagement:
+    def __init__(self, username, cursor, finished):
+        self.username, self.finished = username, cursor, finished
+    
+    def to_insert(self):
+        return (self.username, self.cursor, self.finished)
+    
+    @classmethod
+    def from_database(cls, row):
+        return cls(row["username"], row["cursor"], row["finished"])
+
 class InstaAccountToFollow:
     def __init__(self, user_id, date_follow, date_unfollow):
         self.user_id, self.date_follow, self.date_unfollow = user_id, date_follow, date_unfollow
@@ -69,4 +79,15 @@ class InstaAccountToFollow:
     @classmethod
     def from_database(cls, row):
         return cls(row["user_id"], row["date_follow"], row["date_unfollow"])
+
+class TwitterAccountToFollow:
+    def __init__(self, user_id, date_follow, date_unfollow, eng_id = None):
+        self.user_id, self.date_follow, self.date_unfollow, self.eng_id = user_id, date_follow, date_unfollow, eng_id
+
+    def to_insert(self):
+        return (self.user_id, self.date_follow, self.date_unfollow)
+
+    @classmethod
+    def from_database(cls, row):
+        return cls(row["user_id"], row["date_follow"], row["date_unfollow"], row["eng_id"])
 

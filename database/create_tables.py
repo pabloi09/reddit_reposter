@@ -31,17 +31,30 @@ def create_tables(file):
                                         closed boolean default false,
                                         foreign key(project_id) references project(project_id) )""")
 
-    cursor.execute("""CREATE table twitter_followed ( user_id integer not null,
+    cursor.execute("""CREATE table tw_engagement ( eng_id integer primary key,
+                                        username string not null,
+                                        cursor integer default -1,
+                                        project_id integer not null,
+                                        finished boolean default false,
+                                        foreign key(project_id) references project(project_id) )""")
+
+    cursor.execute("""CREATE table insta_engagement ( eng_id integer primary key,
+                                        username string not null,
+                                        project_id integer not null,
+                                        finished boolean default false,
+                                        foreign key(project_id) references project(project_id) )""")
+
+    cursor.execute("""CREATE table tw_followed ( user_id integer not null,
                                                     date_follow timestamp,
                                                     date_unfollow timestamp,
-                                                    project_id integer not null,
-                                                    foreign key(project_id) references project(project_id) )""")
+                                                    eng_id integer not null,
+                                                    foreign key(eng_id) references tw_engagement(eng_id) )""")
 
     cursor.execute("""CREATE table insta_followed ( user_id integer not null,
                                                     date_follow timestamp,
                                                     date_unfollow timestamp,
-                                                    project_id integer not null,
-                                                    foreign key(project_id) references project(project_id) )""")
+                                                    eng_id integer not null,
+                                                    foreign key(eng_id) references insta_engagement(eng_id) )""")
 
     conn.commit()
     conn.close()
