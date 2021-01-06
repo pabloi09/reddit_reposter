@@ -40,6 +40,7 @@ def create_tables(file):
 
     cursor.execute("""CREATE table insta_engagement ( eng_id integer primary key,
                                         username string not null,
+                                        cursor string default "",
                                         project_id integer not null,
                                         finished boolean default false,
                                         foreign key(project_id) references project(project_id) )""")

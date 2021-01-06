@@ -44,6 +44,7 @@ def create_test_data(file):
         q = p.to_insert()
         cursor.execute("UPDATE project SET reddit_config = ?, insta_config = ? WHERE project_id = ?", (q[0],q[2],p.project_id))    
         cursor.executemany("INSERT INTO tw_engagement(username, project_id) VALUES (?,?)", [(username, p.project_id) for username in twitter_config["engagement_accounts"]])
+        cursor.executemany("INSERT INTO insta_engagement(username, project_id) VALUES (?,?)", [(username, p.project_id) for username in insta_config["engagement_accounts"]])
         conn.commit()
     
     conn.close()

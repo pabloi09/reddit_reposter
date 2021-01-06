@@ -59,15 +59,15 @@ class TwitterEngagement:
         return cls(row["username"], row["cursor"], row["finished"], row["eng_id"], row["project_id"])
 
 class InstaEngagement:
-    def __init__(self, username, cursor, finished):
-        self.username, self.finished = username, cursor, finished
+    def __init__(self, username, cursor = "", finished = False, eng_id = None, project_id = None):
+        self.username, self.cursor, self.finished, self.eng_id, self.project_id = username, cursor, finished, eng_id, project_id
     
     def to_insert(self):
-        return (self.username, self.cursor, self.finished)
+        return (self.username, self.cursor, self.cursor == "finished")
     
     @classmethod
     def from_database(cls, row):
-        return cls(row["username"], row["cursor"], row["finished"])
+        return cls(row["username"], row["cursor"], row["finished"], row["eng_id"], row["project_id"])
 
 class InstaAccountToFollow:
     def __init__(self, user_id, date_follow, date_unfollow):

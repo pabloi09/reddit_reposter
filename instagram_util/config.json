@@ -1,6 +1,9 @@
 {
-    "username":"username(without @)", 
-    "password": "password",
+    "username":"", 
+    "password": "",
     "cookie_location": "/location/to/coookies/config/",
-    "template": "{} \nby {} via {}"
+    "template": "{} \nby {} via {}",
+    "engagement_accounts": [
+        "laresistenciacero"
+    ]
 }
