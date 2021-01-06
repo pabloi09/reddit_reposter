@@ -3,7 +3,7 @@ from twitter_util.TwitterUtil import TwitterUtil
 
 PATH_TEMPLATE = "{}{}/"
 
-dbAPI = Database("db.db")
+dbAPI = Database()
 
 for project in dbAPI.get_projects():
     

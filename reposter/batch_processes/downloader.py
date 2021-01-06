@@ -1,7 +1,7 @@
 from database.Database import Database
 from reddit_downloader.RedditDownloader import RedditDownloader
 
-dbAPI = Database("db.db")
+dbAPI = Database()
 
     
 for project in dbAPI.get_projects():

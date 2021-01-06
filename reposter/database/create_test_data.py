@@ -4,7 +4,7 @@ import json
 
 REDDIT_PATH = "/var/www/html/data/{}/reddit/{}/"
 INSTA_PATH = "/var/www/html/data/{}/insta/{}/"
-
+PROJECT_PATH = "/reposter/{}"
 def create_test_data(file):
     
     conn = sqlite3.connect(file)
@@ -16,13 +16,13 @@ def create_test_data(file):
         User("prueba2","password").to_insert(),
     ]
 
-    with open("/home/pablo/projects/reddit_reposter/reddit_downloader/config.json") as json_config:
+    with open(PROJECT_PATH.format("reddit_downloader/config.json")) as json_config:
         reddit_config = json.load(json_config)
 
-    with open("/home/pablo/projects/reddit_reposter/twitter_util/config.json") as json_config:
+    with open(PROJECT_PATH.format("twitter_util/config.json")) as json_config:
         twitter_config = json.load(json_config)
     
-    with open("/home/pablo/projects/reddit_reposter/instagram_util/config.json") as json_config:
+    with open(PROJECT_PATH.format("instagram_util/config.json")) as json_config:
         insta_config = json.load(json_config)
 
     projects = [

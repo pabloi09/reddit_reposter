@@ -2,7 +2,7 @@ from database.Database import Database
 from instagram_util.InstaUtil import InstaUtil
 
 
-dbAPI = Database("db.db")
+dbAPI = Database()
 
 for project in dbAPI.get_projects():
     account = None

@@ -6,7 +6,7 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.backends import default_backend
 import os
 
-KEY_FILE = "./reddit_reposter.key"
+KEY_FILE = "/reposter/reposter.key"
 class Security:
 
     def __init__(self):

@@ -1,7 +1,7 @@
 from database.Database import Database
 from twitter_util.TwitterUtil import TwitterUtil
 
-dbAPI = Database("db.db")
+dbAPI = Database()
 
 for project in dbAPI.get_projects():
     if dbAPI.no_more_tw_accounts_to_follow(project.project_id):

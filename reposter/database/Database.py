@@ -5,6 +5,8 @@ from database.model import User, Project, TwitterAccountToFollow, Post, InstaAcc
 import sqlite3
 import datetime
 
+DATABASE_PATH = "/reposter/db.db"
+
 class Database:
     def __init__(self, file):
         if not os.path.isfile(file):
