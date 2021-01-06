@@ -7,21 +7,29 @@ Pillow == 7.0.0
 cryptography == 2.8
 
 # reddit_reposter/instagram_util/InstaUtil.py: 1
-# reddit_reposter/media_util.py: 84
-instabot == 0.117.0
+# reddit_reposter/media_util.py: 95
+git+git://github.com/pabloi09/igbot@master#egg=instabot
 
+# reddit_reposter/batch_processes/daily_scheduler.py: 3
+# reddit_reposter/instagram_util/test_insta_util.py: 4
 # reddit_reposter/media_util.py: 3
 numpy == 1.19.4
 
 # reddit_reposter/reddit_downloader/RedditDownloader.py: 1
 praw == 7.1.0
 
+# reddit_reposter/batch_processes/daily_scheduler.py: 1
+python_crontab == 2.5.1
+
 # reddit_reposter/reddit_downloader/RedditDownloader.py: 2
 # reddit_reposter/twitter_util/VideoMedia.py: 5
 requests == 2.22.0
 
-# reddit_reposter/media_util.py: 2,50
+# reddit_reposter/media_util.py: 2,56
 scipy == 1.5.4
+
+# reddit_reposter/setup.py: 1
+setuptools == 45.2.0
 
 # reddit_reposter/twitter_util/TwitterUtil.py: 1
 tweepy == 3.9.0

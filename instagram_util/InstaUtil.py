@@ -1,7 +1,6 @@
 from instabot import Bot
 from media_util import is_a_video, get_post_data, PhotoCropper, is_an_image
 
-
 class InstaUtil:
 
     def __init__(self, config):
@@ -24,8 +23,8 @@ class InstaUtil:
             PhotoCropper().prepare_and_fix_photo(filename)
             self.bot.upload_photo(filename, caption=caption)
     
-    def get_followers_of(self, user_id, nfollowers = None):
-        return self.bot.get_user_followers(user_id, nfollowers)
+    def get_followers_of(self, user_id, cursor = "", nfollowers = 10000):
+        return self.bot.get_user_followers(user_id, nfollowers, cursor)
     
     def follow(self, user_id): # 200 follows/ día. 1 follow/ 7 min y 30 seg. Mejor randomizar la distribución y el número de follows al día. Entre 160 y 180 por ejemplo. Randomizadamente distribuidos
         return self.bot.follow(user_id)
