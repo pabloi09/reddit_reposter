@@ -16,6 +16,23 @@ The instructions can be found <a href="https://docs.docker.com/engine/install/ub
 ## 2. Download this project
 ```
 git clone https://github.com/pabloi09/reddit_reposter.git
+cd reddit_reposter
 ```
+
 ## 3. Configure your developer options in the three social media web pages:
-- For twitter create a new app with read/write 
+- **For Twitter:** create a new app inside a new Project with read/write permissions from the <a href = "https://developer.twitter.com"> Developer Portal </a>
+- **For Reddit:**  create a new application from the <a href="https://www.reddit.com/prefs/apps/">Preferences</a>
+- **For Instagram:** it is advised to make the account a Business account
+
+## 4. Edit the three config.json files with the required keys obtained in the previous step 
+- reposter/instagram_util/config.json
+- reposter/reddit_downloader/config.json
+- reposter/twitter_util/config.json
+
+## 5. Start the container
+```
+chmod +x start.sh
+./start.sh
+```
+
+The routines are preconfigured. You can always change the behavior taking a look to the code :sunglasses:
