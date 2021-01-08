@@ -5,6 +5,7 @@ import json
 REDDIT_PATH = "/var/www/html/data/{}/reddit/{}/"
 INSTA_PATH = "/var/www/html/data/{}/insta/{}/"
 PROJECT_PATH = "/reposter/{}"
+#PROJECT_PATH = "/home/pablo/projects/reddit_reposter/reposter/{}"
 def create_test_data(file):
     
     conn = sqlite3.connect(file)

@@ -7,6 +7,7 @@ from cryptography.hazmat.backends import default_backend
 import os
 
 KEY_FILE = "/reposter/reposter.key"
+#KEY_FILE = "/home/pablo/projects/reddit_reposter/reposter/reposter.key"
 class Security:
 
     def __init__(self):

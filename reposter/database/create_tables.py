@@ -51,7 +51,7 @@ def create_tables(file):
                                                     eng_id integer not null,
                                                     foreign key(eng_id) references tw_engagement(eng_id) )""")
 
-    cursor.execute("""CREATE table insta_followed ( user_id integer not null,
+    cursor.execute("""CREATE table insta_followed ( user_id string not null,
                                                     date_follow timestamp,
                                                     date_unfollow timestamp,
                                                     eng_id integer not null,

@@ -3,13 +3,13 @@ import os
 import numpy
 import random
 
-COMMAND_TEMPLATE = "python /reposter/batch_processes/{} >> batch.log"
+COMMAND_TEMPLATE = "python /reposter/batch_processes/{} >> /batch.log"
 
 class Scheduler:
 
     def __init__(self, user):
         os.system("crontab -r -u {}".format(user))
-        self.cron = CronTab(user='pablo')
+        self.cron = CronTab(user=user)
         self.schedule_job_on(command=COMMAND_TEMPLATE.format("daily_scheduler.py"), hours = 0, minutes = 0)
         self.follow_dist = self.get_follow_distribution()
         self.repost_dist = self.get_repost_distribution()
@@ -63,6 +63,7 @@ class Scheduler:
     def schedule_job_on(self, command, hours, minutes):
         job = self.cron.new(command=command)
         job.hour.on(hours)
+        job.minute.on(minutes)
         self.cron.write()
     
     def schedule_job_every(self, command, hours, minutes):
