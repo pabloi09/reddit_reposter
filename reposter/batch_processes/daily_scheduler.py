@@ -3,7 +3,7 @@ import os
 import numpy
 import random
 
-COMMAND_TEMPLATE = "python /reposter/batch_processes/{} >> /reposter/batch.log"
+COMMAND_TEMPLATE = "python /reposter/batch_processes/{} >> /reposter/batch.log 2>&1" 
 
 class Scheduler:
 
