@@ -8,7 +8,7 @@ import datetime
 DATABASE_PATH = "/reposter/db.db"
 
 class Database:
-    def __init__(self, file):
+    def __init__(self, file = DATABASE_PATH):
         if not os.path.isfile(file):
             create_tables(file)
             create_test_data(file)
