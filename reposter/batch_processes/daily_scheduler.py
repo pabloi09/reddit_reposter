@@ -3,7 +3,7 @@ import os
 import numpy
 import random
 
-COMMAND_TEMPLATE = "python /reposter/batch_processes/{} >> /batch.log"
+COMMAND_TEMPLATE = "python /reposter/batch_processes/{} >> /reposter/batch.log"
 
 class Scheduler:
 
@@ -101,7 +101,7 @@ class Scheduler:
                         second_shift.append((hours,minutes))
         return [first_shift, second_shift]
 
-scheduler = Scheduler("pablo")
+scheduler = Scheduler("root")
 scheduler.make_daily_schedule()
 
 
