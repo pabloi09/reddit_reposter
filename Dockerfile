@@ -10,4 +10,4 @@ RUN pip install -r requirements.txt
 RUN crontab -l | { cat; echo "@daily python /reposter/batch_processes/daily_scheduler.py >> /reposter/batch.log 2>&1"; } | crontab -
 RUN echo "Batch processes log file" >> /reposter/batch.log
 
-CMD cron & tail -f /reposter/batch.log &  service cron force-reload
+CMD cron &  service cron force-reload & tail -f /reposter/batch.log
