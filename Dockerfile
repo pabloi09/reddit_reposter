@@ -5,10 +5,11 @@ RUN apt-get upgrade -y
 RUN apt-get install ffmpeg cron nano -y
 COPY ./reposter/ /reposter
 WORKDIR /reposter
+
 ENV VIRTUAL_ENV=/reposter/venv 
 RUN python -m venv $VIRTUAL_ENV
-RUN PATH="$VIRTUAL_ENV/bin:$PATH"
-RUN . /venv/bin/activate
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
 RUN pip install -e .
 RUN pip install -r requirements.txt
 RUN echo "Batch processes log file" >> /reposter/batch.log
