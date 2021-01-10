@@ -2,7 +2,7 @@ from crontab import CronTab
 import os
 import random
 
-COMMAND_TEMPLATE =  "/reposter/venv/bin/python /reposter/batch_processes/{} >> /reposter/batch.log 2>&1" 
+COMMAND_TEMPLATE = "python /reposter/batch_processes/{} >> /reposter/batch.log 2>&1" 
 
 class Scheduler:
 
@@ -64,12 +64,11 @@ class Scheduler:
         job.hour.on(hours)
         job.minute.on(minutes)
         self.cron.write()
-    import sys
-
-PYTHONPATH = "PYTHONPATH="
-for p in sys.path:
-    if "site-packages" in p:
-        PYTHONPATH = PYTHONPATH + p
+    
+    def schedule_job_every(self, command, hours, minutes):
+        job = self.cron.new(command=command)
+        job.hour.every(hours)
+        job.minute.on(minutes)
         self.cron.write()
     
     def get_follow_distribution(self):
@@ -101,7 +100,7 @@ for p in sys.path:
                         second_shift.append((hours,minutes))
         return [first_shift, second_shift]
 
-scheduler = Scheduler("pablo")
+scheduler = Scheduler("root")
 scheduler.make_daily_schedule()
 
 
