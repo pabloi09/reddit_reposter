@@ -2,7 +2,7 @@ from crontab import CronTab
 import os
 import random
 
-COMMAND_TEMPLATE = "python /reposter/batch_processes/{} >> /reposter/batch.log 2>&1" 
+COMMAND_TEMPLATE = "/reposter/venv/bin/python /reposter/batch_processes/{} >> /reposter/batch.log 2>&1" 
 
 class Scheduler:
 
