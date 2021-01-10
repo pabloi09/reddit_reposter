@@ -23,7 +23,7 @@ class InstaUtil:
             PhotoCropper().prepare_and_fix_photo(filename)
             self.bot.upload_photo(filename, caption=caption)
     
-    def get_followers_of(self, user_id, cursor = "", nfollowers = 10000):
+    def get_followers_of(self, user_id, cursor = "", nfollowers = 1000):
         return self.bot.get_user_followers(user_id, nfollowers, cursor)
     
     def follow(self, user_id): # 200 follows/ día. 1 follow/ 7 min y 30 seg. Mejor randomizar la distribución y el número de follows al día. Entre 160 y 180 por ejemplo. Randomizadamente distribuidos
