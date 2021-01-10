@@ -5,7 +5,9 @@ RUN apt-get upgrade -y
 RUN apt-get install ffmpeg cron nano -y
 COPY ./reposter/ /reposter
 WORKDIR /reposter
-RUN python -m venv venv
+ENV VIRTUAL_ENV=/reposter/venv 
+RUN python -m venv $VIRTUAL_ENV
+RUN PATH="$VIRTUAL_ENV/bin:$PATH"
 RUN . /venv/bin/activate
 RUN pip install -e .
 RUN pip install -r requirements.txt
