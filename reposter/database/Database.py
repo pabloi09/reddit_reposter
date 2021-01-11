@@ -6,7 +6,7 @@ import sqlite3
 import datetime
 
 DATABASE_PATH = "/reposter/db.db"
-
+#DATABASE_PATH = "/home/pablo/projects/reddit_reposter/reposter/db.db"
 class Database:
     def __init__(self, file = DATABASE_PATH):
         if not os.path.isfile(file):
@@ -46,14 +46,14 @@ class Database:
         self.cursor.execute("select * from post where closed = ? and project_id = ? and date_uploaded_tw is ?", (False, project_id, None))
         post = self.cursor.fetchone()
         self.disconnect()
-        return Post.from_database(post)
+        return Post.from_database(post) if post else post
 
     def get_next_insta_post(self, project_id):
         self.connect()
         self.cursor.execute("select * from post where closed = ? and project_id = ? and date_uploaded_tw is not ? and date_uploaded_insta is ?", (False, project_id, None, None))
         post = self.cursor.fetchone()
         self.disconnect()
-        return Post.from_database(post)
+        return Post.from_database(post) if post else post
 
     def get_finished_posts(self, project_id):
         self.connect()
@@ -65,16 +65,16 @@ class Database:
     def get_next_tw_engagement_account(self, project_id):
         self.connect()
         self.cursor.execute("select * from tw_engagement where finished = ? and cursor is not ? and project_id = ?", (False, 0, project_id))
-        engagement = TwitterEngagement.from_database(self.cursor.fetchone())
+        engagement = self.cursor.fetchone()
         self.disconnect()
-        return engagement
+        return TwitterEngagement.from_database(engagement) if engagement else engagement
 
     def get_next_insta_engagement_account(self, project_id):
         self.connect()
         self.cursor.execute("select * from insta_engagement where finished = ? and cursor is not ? and project_id = ?", (False, "finished", project_id))
-        engagement = InstaEngagement.from_database(self.cursor.fetchone())
+        engagement = self.cursor.fetchone()
         self.disconnect()
-        return engagement
+        return InstaEngagement.from_database(engagement) if engagement else engagement
     
     def get_next_tw_user_to_follow(self, project_id):
         self.connect()
@@ -83,9 +83,9 @@ class Database:
                                on tw_engagement.eng_id = tw_followed.eng_id 
                                where tw_followed.date_follow is ?
                                and tw_engagement.project_id = ?;""",(None, project_id,))
-        account = TwitterAccountToFollow.from_database(self.cursor.fetchone())
+        query = self.cursor.fetchone() 
         self.disconnect()
-        return account
+        return TwitterAccountToFollow.from_database(query) if query else query
     
     def get_next_insta_user_to_follow(self, project_id):
         self.connect()
@@ -94,9 +94,9 @@ class Database:
                                on insta_engagement.eng_id = insta_followed.eng_id 
                                where insta_followed.date_follow is ? 
                                and insta_engagement.project_id = ?;""",(None,project_id,))
-        account = InstaAccountToFollow.from_database(self.cursor.fetchone())
+        query = self.cursor.fetchone() 
         self.disconnect()
-        return account
+        return InstaAccountToFollow.from_database(query) if query else query
     
     def get_next_tw_user_to_unfollow(self, project_id, days = 5):
         now = datetime.datetime.now()
@@ -109,9 +109,9 @@ class Database:
                                where tw_followed.date_follow < ?
                                and tw_followed.date_unfollow is ?
                                and tw_engagement.project_id = ?;""",(date, None, project_id))
-        account = TwitterAccountToFollow.from_database(self.cursor.fetchone())
+        query = self.cursor.fetchone()
         self.disconnect()
-        return account
+        return TwitterAccountToFollow.from_database(query) if query else query
     
     def get_next_insta_user_to_unfollow(self, project_id, days = 5):
         now = datetime.datetime.now()
@@ -124,9 +124,9 @@ class Database:
                                where insta_followed.date_follow < ?
                                and insta_followed.date_unfollow is ?
                                and insta_engagement.project_id = ?;""",(date, None, project_id))
-        account = InstaAccountToFollow.from_database(self.cursor.fetchone())
+        query = self.cursor.fetchone()
         self.disconnect()
-        return account
+        return InstaAccountToFollow.from_database(query) if query else query
     
     def no_more_tw_accounts_to_follow(self, project_id):
         self.connect()

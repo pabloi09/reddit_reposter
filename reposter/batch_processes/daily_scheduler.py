@@ -1,8 +1,9 @@
 from crontab import CronTab
 import os
 import random
+import logger
 
-COMMAND_TEMPLATE = "/reposter/venv/bin/python /reposter/batch_processes/{} >> /reposter/batch.log 2>&1" 
+COMMAND_TEMPLATE = "/reposter/venv/bin/python /reposter/batch_processes/{}" 
 
 class Scheduler:
 
@@ -20,9 +21,9 @@ class Scheduler:
         self.make_repost_schedule()
 
     def make_core_schedule(self):
-        self.schedule_job_on(command=COMMAND_TEMPLATE.format("downloader.py"), hours = 0, minutes = 5)
-        self.schedule_job_on(command=COMMAND_TEMPLATE.format("downloader.py"), hours = 12, minutes = 5)
-        self.schedule_job_every(command=COMMAND_TEMPLATE.format("file_cleaner.py"), hours = 1, minutes = 30)
+        self.schedule_job_on(command=COMMAND_TEMPLATE.format("downloader.py"), hours = 0, minutes = 10)
+        self.schedule_job_on(command=COMMAND_TEMPLATE.format("downloader.py"), hours = 12, minutes = 10)
+        self.schedule_job_on(command=COMMAND_TEMPLATE.format("file_cleaner.py"), hours = 0, minutes = 30)
         self.schedule_job_every(command=COMMAND_TEMPLATE.format("tw_discoverer.py"), hours = 1, minutes = 5)
         self.schedule_job_every(command=COMMAND_TEMPLATE.format("insta_discoverer.py"), hours = 1, minutes = 5)
     
@@ -48,16 +49,16 @@ class Scheduler:
             self.schedule_job_on(command=COMMAND_TEMPLATE.format("tw_unfollower.py"), hours = hours, minutes = minutes)
 
     def make_repost_schedule(self):
-        number_of_posts = 10
+        number_of_posts = 20
         times = random.sample(self.repost_dist[0], number_of_posts)
         for (hours, minutes) in times:
             self.schedule_job_on(command=COMMAND_TEMPLATE.format("twitter_poster.py"), hours = hours, minutes = minutes)
-            self.schedule_job_on(command=COMMAND_TEMPLATE.format("insta_poster.py"), hours = hours, minutes = minutes + 10)
+            self.schedule_job_on(command=COMMAND_TEMPLATE.format("insta_poster.py"), hours = hours, minutes = minutes + 3)
 
         times = random.sample(self.repost_dist[1], number_of_posts)
         for (hours, minutes) in times:
             self.schedule_job_on(command=COMMAND_TEMPLATE.format("twitter_poster.py"), hours = hours, minutes = minutes)
-            self.schedule_job_on(command=COMMAND_TEMPLATE.format("insta_poster.py"), hours = hours, minutes = minutes + 10)
+            self.schedule_job_on(command=COMMAND_TEMPLATE.format("insta_poster.py"), hours = hours, minutes = minutes + 3)
 
     def schedule_job_on(self, command, hours, minutes):
         job = self.cron.new(command=command)
@@ -87,21 +88,22 @@ class Scheduler:
         second_shift = []
         for hours in range(0,24):
             if hours != 0 and hours != 12:
-                for minutes in range(0,50):
+                for minutes in range(0,57):
                     if hours < 12:
                         first_shift.append((hours,minutes))
                     else:
                         second_shift.append((hours,minutes))
             else:
-                for minutes in range(10,50):
+                for minutes in range(15,57):
                     if hours < 12:
                         first_shift.append((hours,minutes))
                     else:
                         second_shift.append((hours,minutes))
         return [first_shift, second_shift]
-
+logger.info("Starting scheduler")
 scheduler = Scheduler("root")
 scheduler.make_daily_schedule()
+logger.info("Scheduler finished")
 
 
 

@@ -6,6 +6,7 @@ import concurrent.futures
 import re
 import youtube_dl
 from media_util import is_an_image, is_a_video, path_does_not_exist
+import logger
 
 class RedditDownloader:
     def __init__(self, 
@@ -35,7 +36,7 @@ class RedditDownloader:
                 for post_id in self.downloaded:
                     self.record_post(post_id)
         except Exception as e:
-            print(e)
+            logger.error(e)
     
     def get_submissions_by_filter(self):
         if self.filter == 'hot':
@@ -108,7 +109,7 @@ class RedditDownloader:
             self.save_metadata(post)
             self.downloaded.append(post["id"])
         except Exception as e:
-            print(e)
+            logger.error(e)
             
     
     def download_and_save_image(self,post):
