@@ -1,5 +1,8 @@
 import logging
-logging.basicConfig(filename='/reposter/batch.log',format='%(levelname)s:%(asctime)s %(message)s', level=logging.INFO)
+
+LOGGER_PATH = '/reposter/batch.log'
+#LOGGER_PATH = '/home/pablo/projects/reddit_reposter/reposter/batch.log'
+logging.basicConfig(filename=LOGGER_PATH,format='%(levelname)s:%(asctime)s %(message)s', level=logging.INFO)
 
 def info(message):
     logging.info(message)

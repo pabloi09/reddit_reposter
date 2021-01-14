@@ -2,8 +2,12 @@ from crontab import CronTab
 import os
 import random
 import logger
+from datetime import datetime
+import json
 
 COMMAND_TEMPLATE = "/reposter/venv/bin/python /reposter/batch_processes/{}" 
+SCHEDULE_PATH = "/reposter/insta_schedule.json"
+#SCHEDULE_PATH = "/home/pablo/projects/reddit_reposter/reposter/insta_schedule.json"
 
 class Scheduler:
 
@@ -13,29 +17,33 @@ class Scheduler:
         self.schedule_job_on(command=COMMAND_TEMPLATE.format("daily_scheduler.py"), hours = 0, minutes = 0)
         self.follow_dist = self.get_follow_distribution()
         self.repost_dist = self.get_repost_distribution()
+        self.insta_schedule = {"time_array": [], "actions":{}}
     
     def make_daily_schedule(self):
         self.make_core_schedule()
+        self.make_repost_schedule()
         self.make_insta_engagement_schedule()
         self.make_tw_engagement_schedule()
-        self.make_repost_schedule()
+        with open(SCHEDULE_PATH, 'w+') as json_schedule:
+            json.dump(self.insta_schedule, json_schedule)
 
     def make_core_schedule(self):
         self.schedule_job_on(command=COMMAND_TEMPLATE.format("downloader.py"), hours = 0, minutes = 10)
         self.schedule_job_on(command=COMMAND_TEMPLATE.format("downloader.py"), hours = 12, minutes = 10)
         self.schedule_job_on(command=COMMAND_TEMPLATE.format("file_cleaner.py"), hours = 0, minutes = 30)
-        self.schedule_job_every(command=COMMAND_TEMPLATE.format("tw_discoverer.py"), hours = 1, minutes = 5)
+        for hour in range(0,24):
+            self.add_insta_schedule(hour, 5, "discover")
         self.schedule_job_every(command=COMMAND_TEMPLATE.format("insta_discoverer.py"), hours = 1, minutes = 5)
     
     def make_insta_engagement_schedule(self):
         number_of_follows = random.randint(160,190)
         times = random.sample(self.follow_dist, number_of_follows)
         for (hours, minutes) in times:
-            self.schedule_job_on(command=COMMAND_TEMPLATE.format("insta_follower.py"), hours = hours, minutes = minutes)
+            self.add_insta_schedule(hours, minutes, "follow")
 
         times = random.sample(self.follow_dist, number_of_follows)
         for (hours, minutes) in times:
-            self.schedule_job_on(command=COMMAND_TEMPLATE.format("insta_unfollower.py"), hours = hours, minutes = minutes)
+            self.add_insta_schedule(hours, minutes, "unfollow")
 
         
     def make_tw_engagement_schedule(self):
@@ -53,12 +61,19 @@ class Scheduler:
         times = random.sample(self.repost_dist[0], number_of_posts)
         for (hours, minutes) in times:
             self.schedule_job_on(command=COMMAND_TEMPLATE.format("twitter_poster.py"), hours = hours, minutes = minutes)
-            self.schedule_job_on(command=COMMAND_TEMPLATE.format("insta_poster.py"), hours = hours, minutes = minutes + 3)
+            self.add_insta_schedule(hours, minutes+3, "post")
 
         times = random.sample(self.repost_dist[1], number_of_posts)
         for (hours, minutes) in times:
             self.schedule_job_on(command=COMMAND_TEMPLATE.format("twitter_poster.py"), hours = hours, minutes = minutes)
-            self.schedule_job_on(command=COMMAND_TEMPLATE.format("insta_poster.py"), hours = hours, minutes = minutes + 3)
+            self.add_insta_schedule(hours, minutes+3, "post")
+    
+    def add_insta_schedule(self, hours, minutes, action):
+            today = datetime.now()
+            time = today.replace(hour = hours, minute = minutes)
+            string_time = time.strftime('%Y-%m-%d %H:%M:%S.%f')
+            self.insta_schedule["time_array"].append(string_time)
+            self.insta_schedule["actions"][string_time] = action
 
     def schedule_job_on(self, command, hours, minutes):
         job = self.cron.new(command=command)
@@ -100,6 +115,7 @@ class Scheduler:
                     else:
                         second_shift.append((hours,minutes))
         return [first_shift, second_shift]
+
 logger.info("Starting scheduler")
 scheduler = Scheduler("root")
 scheduler.make_daily_schedule()

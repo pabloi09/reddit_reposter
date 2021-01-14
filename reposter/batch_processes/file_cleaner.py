@@ -21,7 +21,7 @@ for project in dbAPI.get_projects():
             yesterday = now - datetime.timedelta(days = 1)
             os.system("mv /reposter/batch.log /reposter/batch.log.{}".format(yesterday.strftime('%Y-%m-%d')))
             last_week = now - datetime.timedelta(days = 7)
-            last_week_file  = "batch.log.{}".format(last_week.strftime('%Y-%m-%d')
+            last_week_file  = "batch.log.{}".format(last_week.strftime('%Y-%m-%d'))
             if os.path.isfile(last_week_file):
                 os.system("rm {}".format(last_week_file))
         except Exception as e:
