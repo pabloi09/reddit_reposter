@@ -1,3 +1,3 @@
 #/bin/bash
-sudo docker build -t "reposter" .
-sudo docker run -d -v reposter:/reposter --net=host reposter
+docker build -t "reposter" .
+docker run -d -v reposter:/reposter --net=host --name=reposter_app reposter 
