@@ -10,8 +10,10 @@ class InstaUtil:
                        unfollow_delay = 0,
                        max_follows_per_day=10000,
                        max_unfollows_per_day=10000)
-        self.bot.login(username= config["username"], password= config["password"])
         self.template = config["template"]
+    
+    def login(self, config):
+        self.bot.login(username= config["username"], password= config["password"], is_threaded = True)
 
     def publish_post(self, path):
         filename, metadata = get_post_data(path)

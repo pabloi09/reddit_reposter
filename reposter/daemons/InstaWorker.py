@@ -26,6 +26,7 @@ class InstaWorker(multiprocessing.Process):
         self.dbAPI = Database()
         self.schedule = schedule
         self.insta_util = InstaUtil(project.insta_config)
+        self.insta_util.login(project.insta_config)
         self.project_id = project.project_id
         logger.info("Project({}):::new worker created".format(self.project_id))
         super().__init__()
