@@ -2,7 +2,7 @@ FROM python
 
 RUN apt-get update
 RUN apt-get upgrade -y
-RUN apt-get install ffmpeg cron nano -y
+RUN apt-get install ffmpeg cron nano sqlite3 -y
 COPY ./reposter/ /reposter
 WORKDIR /reposter
 
