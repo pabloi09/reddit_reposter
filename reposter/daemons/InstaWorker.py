@@ -5,7 +5,7 @@ import time
 from database.Database import Database
 from instagram_util.InstaUtil import InstaUtil
 import logger
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # {
 #     "time_array": [
@@ -35,7 +35,7 @@ class InstaWorker(multiprocessing.Process):
             try:
                 actions = []
                 now = datetime.now()
-                
+                limit = now - timedelta(minutes = 3)
                 if self.schedule_is_wrong():
                     logger.error("Project({}): Wrong schedule format".format(self.project_id))
                     sys.exit()
@@ -43,8 +43,10 @@ class InstaWorker(multiprocessing.Process):
                 temp = {"time_array": [], "actions":{}}
                 while not actions:
                     for index, time in enumerate(self.schedule["time_array"]):
-                        if datetime.strptime(time, '%Y-%m-%d %H:%M:%S.%f') <= now:
-                            actions.append(self.schedule["actions"][time])
+                        dt_time = datetime.strptime(time, '%Y-%m-%d %H:%M:%S.%f')
+                        if dt_time <= now :
+                            if dt_time > limit:
+                                actions.append(self.schedule["actions"][time])
                         else:
                             temp["time_array"].append(time)
                             temp["actions"][time] = self.schedule["actions"][time]

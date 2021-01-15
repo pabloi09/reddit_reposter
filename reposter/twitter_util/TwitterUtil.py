@@ -41,6 +41,9 @@ class TwitterUtil:
     
     def check_if_follows_me(self, user_id):
         friendship = self.api.show_friendship(user_id)
+    
+    def is_myself(self, user_id):
+        return self.api.me().id == user_id
 
 
 

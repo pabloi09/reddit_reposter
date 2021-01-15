@@ -33,7 +33,6 @@ class Scheduler:
         self.schedule_job_on(command=COMMAND_TEMPLATE.format("file_cleaner.py"), hours = 0, minutes = 30)
         for hour in range(0,24):
             self.add_insta_schedule(hour, 5, "discover")
-        self.schedule_job_every(command=COMMAND_TEMPLATE.format("insta_discoverer.py"), hours = 1, minutes = 5)
     
     def make_insta_engagement_schedule(self):
         number_of_follows = random.randint(160,190)

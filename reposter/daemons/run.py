@@ -15,11 +15,21 @@ def run_insta_daemon():
     children = {}
     PID = os.getppid()
     logger.info("Running insta daemon for the first time. PID:{}".format(PID))
+    schedule = {}
     while True:
         try:
             if os.path.isfile(SCHEDULE_PATH):
-                with open(SCHEDULE_PATH) as json_schedule:
-                    schedule = json.load(json_schedule)
+                attemps = 0
+                while not schedule:
+                    try:
+                        with open(SCHEDULE_PATH) as json_schedule:
+                            schedule = json.load(json_schedule)
+                    except:
+                        time.sleep(60)
+                        attemps = attemps + 1
+                        if attemps >= 3:
+                            raise  
+                
                 logger.info("Schedule file readed")
                 while True:
                     if datetime.now().day != datetime.strptime(schedule["time_array"][0], '%Y-%m-%d %H:%M:%S.%f').day:
