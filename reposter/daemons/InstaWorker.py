@@ -38,6 +38,8 @@ class InstaWorker(multiprocessing.Process):
                 actions = []
                 if self.schedule_is_wrong():
                     logger.error("Project({}): Wrong schedule format".format(self.project_id))
+                    logger.info(len(self.schedule["time_array"])
+                    logger.info(len(self.schedule["actions"])
                     sys.exit()
 
                 temp = {"time_array": [], "actions":{}}
@@ -67,7 +69,7 @@ class InstaWorker(multiprocessing.Process):
                 logger.error("Project({}):".format(self.project_id) + str(e))
     
     def schedule_is_wrong(self):
-        return not self.schedule or len(self.schedule["time_array"]) == 0 or len(self.schedule["time_array"]) != len(self.schedule["actions"])
+        return (not self.schedule) or (len(self.schedule["time_array"]) == 0) or (len(self.schedule["time_array"]) != len(self.schedule["actions"]))
 
 
     def execute_action(self, action):
