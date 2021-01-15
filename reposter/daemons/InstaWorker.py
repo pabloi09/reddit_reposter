@@ -1,7 +1,7 @@
 import multiprocessing
 import os
 import sys
-import time
+import time as t
 from database.Database import Database
 from instagram_util.InstaUtil import InstaUtil
 import logger
@@ -52,7 +52,7 @@ class InstaWorker(multiprocessing.Process):
                             temp["time_array"].append(time)
                             temp["actions"][time] = self.schedule["actions"][time]
                     if not actions:
-                        time.sleep(30)
+                        t.sleep(30)
             
                 self.schedule = temp
                 
