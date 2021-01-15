@@ -1,5 +1,6 @@
 import daemon
 import lockfile
+from daemon import pidfile
 
 SCHEDULE_PATH = "/reposter/insta_schedule.json"
 #SCHEDULE_PATH = "/home/pablo/projects/reddit_reposter/reposter/insta_schedule.json"
@@ -10,8 +11,9 @@ PID_FILE = WORKING_DIRECTORY + "insta_daemon.pid"
 
 with daemon.DaemonContext(working_directory = WORKING_DIRECTORY, 
                           umask = 0o002, 
-                          pidfile = lockfile.FileLock(PID_FILE)) as context:
+                          pidfile = pidfile.TimeoutPIDLockFile(PID_FILE)) as context:
     from daemons.run import run_insta_daemon
+    
     run_insta_daemon()
     
         

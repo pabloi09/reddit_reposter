@@ -60,10 +60,9 @@ class InstaWorker(multiprocessing.Process):
                 self.schedule = temp
                 
                 for action in actions:
-                    logger.info(action)
-                    #self.execute_action(action)
+                    self.execute_action(action)
                 
-                #self.reviewExistance()
+                self.reviewExistance()
             except Exception as e:
                 logger.error("Project({}):".format(self.project_id) + str(e))
     

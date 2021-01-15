@@ -8,12 +8,16 @@ import logger
 
 SCHEDULE_PATH = "/reposter/insta_schedule.json"
 #SCHEDULE_PATH = "/home/pablo/projects/reddit_reposter/reposter/insta_schedule.json"
+WORKING_DIRECTORY = "/reposter/"
+#WORKING_DIRECTORY = "/home/pablo/projects/reddit_reposter/reposter/"
+PID_FILE = WORKING_DIRECTORY + "insta_daemon.pid"
 
 def run_insta_daemon():
     logger.info("Daemon context created")
     dbAPI = Database()
     children = {}
-    PID = os.getppid()
+    with open(PID_FILE) as f:
+        PID = f.read()
     logger.info("Running insta daemon for the first time. PID:{}".format(PID))
     schedule = {}
     while True:

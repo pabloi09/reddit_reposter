@@ -13,7 +13,7 @@ class InstaUtil:
                        max_unfollows_per_day=10000)
         self.template = config["template"]
     
-    @timeout
+    @timeout(seconds=60)
     def login(self, config):
         return self.bot.login(username= config["username"], password= config["password"], is_threaded = True)
 
