@@ -201,7 +201,7 @@ class Database:
         self.disconnect()
 
     def add_tw_already_followed(self, followers, eng_id):
-        date_follow = datetime.datetime.now()
+        date_follow = datetime.datetime.now() - datetime.timedelta(days=1)
         self.connect()
         self.cursor.executemany("insert into tw_followed(user_id, eng_id, date_follow) values (?,?,?)", [(user_id, eng_id, date_follow) for user_id in followers])
         self.disconnect()
