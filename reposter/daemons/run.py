@@ -24,11 +24,12 @@ def run_insta_daemon():
                     try:
                         with open(SCHEDULE_PATH) as json_schedule:
                             schedule = json.load(json_schedule)
-                    except:
+                    except Exception as e:
+                        logger.error(e)
                         time.sleep(60)
                         attemps = attemps + 1
                         if attemps >= 3:
-                            raise  
+                            raise e  
                 
                 logger.info("Schedule file readed")
                 while True:
