@@ -34,6 +34,7 @@ class InstaWorker(multiprocessing.Process):
     def run(self):
         while True:
             try:
+                logger.info("InstaWorker:: looking for new actions to perform")
                 actions = []
                 now = datetime.now()
                 limit = now - timedelta(minutes = 3)
@@ -52,6 +53,7 @@ class InstaWorker(multiprocessing.Process):
                             temp["time_array"].append(time)
                             temp["actions"][time] = self.schedule["actions"][time]
                     if not actions:
+                        logger.info("InstaWorker:: going to sleep")
                         t.sleep(30)
             
                 self.schedule = temp
