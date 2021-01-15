@@ -10,3 +10,4 @@ rreposter.egg-info
 *.log
 *.pid*
 pablo*
+insta_schedule.json
