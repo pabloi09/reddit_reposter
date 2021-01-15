@@ -1,5 +1,6 @@
 from instabot import Bot
 from media_util import is_a_video, get_post_data, PhotoCropper, is_an_image
+from timeout import timeout
 
 class InstaUtil:
 
@@ -12,8 +13,9 @@ class InstaUtil:
                        max_unfollows_per_day=10000)
         self.template = config["template"]
     
+    @timeout
     def login(self, config):
-        self.bot.login(username= config["username"], password= config["password"], is_threaded = True)
+        return self.bot.login(username= config["username"], password= config["password"], is_threaded = True)
 
     def publish_post(self, path):
         filename, metadata = get_post_data(path)
