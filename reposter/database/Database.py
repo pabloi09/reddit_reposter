@@ -149,6 +149,16 @@ class Database:
         count = self.cursor.fetchone()[0]
         self.disconnect()
         return count == 0
+    
+    def tw_followed_is_empty(self, project_id):
+        self.connect()
+        self.cursor.execute("""SELECT COUNT(*) from insta_followed 
+                               inner join insta_engagement 
+                               on insta_engagement.eng_id = insta_followed.eng_id 
+                               where insta_engagement.project_id = ?;""",(None,project_id,))
+        count = self.cursor.fetchone()[0]
+        self.disconnect()
+        return count == 0
 
     
     #SETTERS
@@ -188,6 +198,12 @@ class Database:
     def add_tw_followers(self, followers, eng_id):
         self.connect()
         self.cursor.executemany("insert into tw_followed(user_id, eng_id) values (?,?)", [(user_id, eng_id) for user_id in followers])
+        self.disconnect()
+
+    def add_tw_already_followed(self, followers, eng_id):
+        date_follow = datetime.datetime.now()
+        self.connect()
+        self.cursor.executemany("insert into tw_followed(user_id, eng_id, date_follow) values (?,?,?)", [(user_id, eng_id, date_follow) for user_id in followers])
         self.disconnect()
     
     def add_insta_followers(self, followers, eng_id):

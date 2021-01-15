@@ -44,6 +44,9 @@ class TwitterUtil:
     
     def is_myself(self, user_id):
         return self.api.me().id == user_id
+    
+    def get_users_followed(self):
+        return self.api.friends_ids(self.api.me().id)
 
 
 
