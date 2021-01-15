@@ -35,15 +35,14 @@ class InstaWorker(multiprocessing.Process):
         while True:
             try:
                 logger.info("InstaWorker:: looking for new actions to perform")
-                actions = []
                 if self.schedule_is_wrong():
                     logger.error("Project({}): Wrong schedule format".format(self.project_id))
-                    logger.info(len(self.schedule["time_array"]))
-                    logger.info(len(self.schedule["actions"]))
                     sys.exit()
 
-                temp = {"time_array": [], "actions":{}}
-                while not actions:
+                actions = []
+                temp = {}
+                while (not actions) and self.schedule["time_array"]:
+                    temp = {"time_array": [], "actions":{}}
                     now = datetime.now()
                     limit = now - timedelta(minutes = 3)
                     for index, time in enumerate(self.schedule["time_array"]):
