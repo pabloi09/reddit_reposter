@@ -42,3 +42,4 @@ tweepy == 3.9.0
 # reposter/reddit_downloader/RedditDownloader.py: 7
 youtube_dl == 2020.12.12
 
+urllib3 == 1.26.2
