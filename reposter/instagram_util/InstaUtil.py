@@ -5,7 +5,6 @@ from timeout import timeout
 class InstaUtil:
 
     def __init__(self, config):
-        self.cookie_location = config["cookie_location"]
         self.bot = Bot(base_path = config["cookie_location"],
                        follow_delay = 0, 
                        unfollow_delay = 0,

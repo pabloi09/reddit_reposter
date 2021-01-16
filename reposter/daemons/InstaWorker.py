@@ -133,7 +133,7 @@ class InstaWorker(multiprocessing.Process):
     
     def reviewExistance(self):
         try:
-            os.kill(self.parentPID, 0)
+            os.kill(int(self.parentPID), 0)
         except OSError:
             logger.info("InstaWorker::Project({}): Parent process was killed, killing myself".format(self.project_id))
             return sys.exit()

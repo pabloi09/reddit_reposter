@@ -29,7 +29,6 @@ def run_insta_daemon():
                         with open(SCHEDULE_PATH) as json_schedule:
                             schedule = json.load(json_schedule)
                     except Exception as e:
-                        logger.error(e)
                         time.sleep(60)
                         attemps = attemps + 1
                         if attemps >= 3:
@@ -41,6 +40,7 @@ def run_insta_daemon():
                         for worker in children.values():
                             worker.kill()
                         children = {}
+                        schedule = {}
                         break
                     for project in dbAPI.get_projects():
                         if not children or (not (project.project_id in children.keys())):
