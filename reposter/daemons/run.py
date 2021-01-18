@@ -17,7 +17,8 @@ def run_insta_daemon():
     dbAPI = Database()
     children = {}
     with open(PID_FILE) as f:
-        PID = f.read()
+        PID = f.readline()
+        break
     logger.info("Running insta daemon for the first time. PID:{}".format(PID))
     schedule = {}
     while True:
